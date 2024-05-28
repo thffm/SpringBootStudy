@@ -4,6 +4,7 @@ import com.Estudos.test.dto.UserDto;
 import com.Estudos.test.entity.User;
 import com.Estudos.test.repository.UserRepository;
 import com.Estudos.test.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +31,19 @@ public class UserService  implements Serializable {
         Optional<User> obj = repository.findById(id);
         User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
         return new UserDto(entity);
+    }
+
+    @Transactional
+    public UserDto update(UserDto user, Long id){
+        try {
+            User entity = repository.getReferenceById(id);
+            entity.setName(user.getName());
+            entity.setAge(user.getAge());
+            entity.setEmail(user.getEmail());
+            entity = repository.save(entity);
+            return  new UserDto(entity);
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Id not found: Id{"+id+"}");
+        }
     }
 }

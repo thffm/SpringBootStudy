@@ -4,9 +4,7 @@ import com.Estudos.test.dto.UserDto;
 import com.Estudos.test.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +28,12 @@ public class UserResource implements Serializable {
     public ResponseEntity<UserDto> findById(@PathVariable Long id){
         UserDto entity = service.findById(id);
         return ResponseEntity.ok().body(entity);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDto> update(@RequestBody UserDto user, @PathVariable Long id){
+        user = service.update(user,id);
+        return ResponseEntity.ok().body(user);
     }
 
 }
