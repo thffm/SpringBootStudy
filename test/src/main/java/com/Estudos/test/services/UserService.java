@@ -46,4 +46,15 @@ public class UserService  implements Serializable {
             throw new ResourceNotFoundException("Id not found: Id{"+id+"}");
         }
     }
+
+    @Transactional
+    public UserDto insert(UserDto dto) {
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setAge(dto.getAge());
+        user.setName(dto.getName());
+        user = repository.save(user);
+        return new UserDto(user);
+
+    }
 }

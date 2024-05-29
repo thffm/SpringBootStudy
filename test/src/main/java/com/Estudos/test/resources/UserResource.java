@@ -5,8 +5,10 @@ import com.Estudos.test.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,6 +36,17 @@ public class UserResource implements Serializable {
     public ResponseEntity<UserDto> update(@RequestBody UserDto user, @PathVariable Long id){
         user = service.update(user,id);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> insert(@RequestBody UserDto dto){
+        dto = service.insert(dto);
+
+        URI uri = ServletUriComponentsBuilder.
+                fromCurrentRequest().path("/{id}").
+                buildAndExpand(dto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(dto);
     }
 
 }
